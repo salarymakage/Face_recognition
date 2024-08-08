@@ -60,6 +60,8 @@ class VideoCamera:
             if profile:
                 global detected_student
                 detected_student = profile
+                detected_student = list(detected_student)  # Convert tuple to list to append image URL
+                detected_student.append(f"/static/img/{profile[0]}.jpg")  # Append image URL
                 text = f"ID: {profile[0]} - Name: {profile[1]} {profile[2]}"
                 cv2.putText(img, text, (x, y + h + 20), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255), 2)
 
@@ -86,7 +88,7 @@ def gen(camera):
         if frame is None:
             continue
         yield (b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 def video_feed(request):
     global camera
@@ -116,6 +118,7 @@ def detected_student_info(request):
             'medical_condition': detected_student[4],
             'address': detected_student[5],
             'emergency_contact': detected_student[6],
+            'image_url': detected_student[7]  # Include the image URL
         })
     return JsonResponse({'Error': 'No student detected'}, status=404)
 

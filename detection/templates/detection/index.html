@@ -6,12 +6,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-
     <div class="container">
         <div class="video-section">
             <h1>Video Feed</h1>
             <div id="videoContainer">
-                <img id="videoFeed" width="1200" height="1800" src="{% static 'img/image.jpg' %}">
+                <img id="videoFeed" width="640" height="360" src="{% static 'img/image.jpg' %}">
                 <div id="loadingSpinner" style="display: none;">
                     <div class="fancy-spinner">
                         <div class="ring"></div>
@@ -19,6 +18,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="button-group">
                 <button id="startVideo">Start Video</button>
                 <button id="stopVideo">Stop Video</button>
@@ -29,7 +29,7 @@
             <h1>Detected Student</h1>
             <div id="detected-student-profile" class="profile-card">
                 <div class="image-section">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuaxuCl-tyOMjfTNy-jlX0xF-qKWybFP8AhA&usqp=CAU" alt="Profile Image">
+                    <img id="profileImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuaxuCl-tyOMjfTNy-jlX0xF-qKWybFP8AhA&usqp=CAU" alt="Profile Image">
                 </div>
                 <div class="form-section">
                     <form action="">
@@ -77,7 +77,7 @@
             document.getElementById('loadingSpinner').style.display = 'none';
             document.getElementById('videoFeed').style.display = 'block';
         });
-    
+
         document.getElementById('stopVideo').addEventListener('click', function() {
             document.getElementById('loadingSpinner').style.display = 'flex';
             document.getElementById('videoFeed').style.display = 'none';
@@ -85,17 +85,17 @@
                 document.getElementById('videoFeed').src = "{% static 'img/image.jpg' %}";
             });
         });
-    
+
         document.getElementById('videoFeed').addEventListener('error', function() {
             document.getElementById('loadingSpinner').style.display = 'flex';
             document.getElementById('videoFeed').style.display = 'none';
         });
-    
+
         if (!document.getElementById('videoFeed').complete || document.getElementById('videoFeed').naturalWidth === 0) {
             document.getElementById('loadingSpinner').style.display = 'flex';
             document.getElementById('videoFeed').style.display = 'none';
         }
-    
+
         function updateDetectedStudent() {
             fetch("{% url 'detected_student_info' %}")
                 .then(response => response.json())
@@ -110,12 +110,12 @@
                     document.getElementById('gender').value = data.gender;
                     document.getElementById('medical-condition').value = data.medical_condition;
                     document.getElementById('address').value = data.address;
+                    document.getElementById('profileImage').src = data.image_url;  // Update the profile image
                 })
                 .catch(error => console.error('Error:', error));
         }
-    
+
         setInterval(updateDetectedStudent, 3000);
     </script>
-    
 </body>
 </html>

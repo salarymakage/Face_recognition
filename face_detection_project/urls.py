@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
-from detection import views  # Import views from the detection app
+from detection import views 
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
